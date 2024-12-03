@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu de Devinette</title>
+</head>
+<body>
+    <h1>Jeu de Devinette</h1>
+    <div class="game-container">
+        <p>Devinez le nombre entre 1 et 100.</p>
+        <input type="number" id="guessInput" placeholder="Entrez votre nombre ici...">
+        <button onclick="testGuess()">Tester</button>
+
+        <div class="message" id="message"></div>
+
+        <h2>Historique des essais :</h2>
+        <ul id="history"></ul>
+    </div>
+
+    <script>
+        // Génération d'un nombre aléatoire entre 1 et 100
+        const secretNumber = Math.floor(Math.random() * 100) + 1;
+        const historyList = [];
+
+        // Fonction pour tester le nombre saisi
+        function testGuess() {
+            const input = document.getElementById('guessInput');
+            const messageDiv = document.getElementById('message');
+            const historyUl = document.getElementById('history');
+            const guess = parseInt(input.value);
+
+            // Vérification si l'entrée est valide
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                messageDiv.textContent = "Veuillez entrer un nombre valide entre 1 et 100.";
+                messageDiv.style.color = "red";
+                return;
+            }
+
+            // Vérification du nombre
+            let message;
+            if (guess < secretNumber) {
+                message = "Trop bas ! Essayez encore.";
+            } else if (guess > secretNumber) {
+                message = "Trop haut ! Essayez encore.";
+            } else {
+                message = "Bravo ! Vous avez trouvé le nombre secret 🎉";
+            }
+
+            // Mise à jour du message et de l'historique
+            messageDiv.textContent = message;
+            messageDiv.style.color = guess === secretNumber ? "green" : "black";
+
+            historyList.push(`${guess} : ${message}`);
+            updateHistory(historyUl);
+
+            // Réinitialiser le champ
+            input.value = '';
+        }
+
+        // Fonction pour mettre à jour l'historique
+        function updateHistory(historyUl) {
+            historyUl.innerHTML = '';
+            historyList.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                historyUl.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>
